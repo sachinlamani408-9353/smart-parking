@@ -1,37 +1,57 @@
-const sheetID = "1ABCxyz123456";
+const sheetID =
+"1XG93Hf0LbT3ka6ljcGnUqLxjvCnVpeGBoOb6traRzck";
 
 const url =
 `https://opensheet.elk.sh/${sheetID}/Sheet1`;
 
+
 async function getData()
 {
-    const response = await fetch(url);
-
-    const data = await response.json();
-
-    document.getElementById("total").innerText =
-    data[0].Total;
-
-    document.getElementById("occupied").innerText =
-    data[0].Occupied;
-
-    document.getElementById("available").innerText =
-    data[0].Available;
-
-    let available = parseInt(data[0].Available);
-
-    if(available > 0)
+    try
     {
-        document.getElementById("status").innerHTML =
-        "🟢 PARKING AVAILABLE";
+        let response = await fetch(url);
+
+        let data = await response.json();
+
+        console.log(data);
+
+
+        document.getElementById("total").innerHTML =
+        data[0]["totalslots"];
+
+
+        document.getElementById("occupied").innerHTML =
+        data[0]["occupied slots"];
+
+
+        document.getElementById("available").innerHTML =
+        data[0]["available slots"];
+
+
+        let free =
+        Number(data[0]["available slots"]);
+
+
+        if(free > 0)
+        {
+            document.getElementById("status").innerHTML =
+            "🟢 PARKING AVAILABLE";
+        }
+        else
+        {
+            document.getElementById("status").innerHTML =
+            "🔴 PARKING FULL";
+        }
+
     }
-    else
+
+    catch(error)
     {
-        document.getElementById("status").innerHTML =
-        "🔴 PARKING FULL";
+        console.log("ERROR:", error);
     }
 }
 
+
 getData();
 
-setInterval(getData, 3000);
+setInterval(getData,3000);
